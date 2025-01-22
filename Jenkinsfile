@@ -218,8 +218,7 @@ pipeline {
           -t $registry:$tagName \
           --push .
         docker buildx rm
-        """
-      }
+        """     
           }
         }
       }
