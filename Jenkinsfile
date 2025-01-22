@@ -218,15 +218,16 @@ pipeline {
         //   --push .
         // docker buildx rm
         // '''
-        def dockerCommands = '''
-        echo "${env.DOCKER_PASSWORD}" | docker login -u "${env.DOCKER_USERNAME}" --password-stdin
-        docker buildx create --use
-        docker buildx build --platform linux/amd64,linux/arm64 \
-          -t ${registry}:${tagName} \
-          --push .
-        docker buildx rm
-        '''
-        sh dockerCommands        
+def shellScript = """
+echo "\$DOCKER_PASSWORD" | docker login -u "\$DOCKER_USERNAME" --password-stdin
+docker buildx create --use
+docker buildx build --platform linux/amd64,linux/arm64 \
+  -t ${registry}:${tagName} \
+  --push .
+docker buildx rm
+"""
+sh shellScript
+  
             }
           }
         }
