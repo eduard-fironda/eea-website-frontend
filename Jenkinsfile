@@ -194,7 +194,6 @@ pipeline {
       //   }
       // }
       steps{
-        {
           script {
             checkout scm
             if (env.BRANCH_NAME == 'master') {
@@ -218,11 +217,11 @@ pipeline {
           -t $registry:$tagName \
           --push .
         docker buildx rm
-        """     
+        """
+            }
           }
         }
       }
-    }
 
     // stage('Release catalog ( on tag )') {
     //   when {
