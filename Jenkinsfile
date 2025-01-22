@@ -196,11 +196,11 @@ pipeline {
       steps{
           script {
             checkout scm
-            // if (env.BRANCH_NAME == 'master') {
-            //   tagName = 'latest'
-            // } else {
-            //   tagName = "$BRANCH_NAME"
-            // }
+            if (env.BRANCH_NAME == 'master') {
+              tagName = 'latest'
+            } else {
+              tagName = "$BRANCH_NAME"
+            }
             // try {
             //   dockerImage = docker.build("$registry:$tagName", "--no-cache .")
             //   docker.withRegistry( '', 'eeajenkins' ) {
@@ -210,14 +210,14 @@ pipeline {
             //   sh "docker rmi $registry:$tagName"
             // }
       withCredentials([usernamePassword(credentialsId: 'eddie-jekinsdockerhub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-        sh '''
+        sh """
         echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
         docker buildx create --use
         docker buildx build --platform linux/amd64,linux/arm64 \
           -t $registry:$tagName \
           --push .
         docker buildx rm
-        '''
+        """
             }
           }
         }
