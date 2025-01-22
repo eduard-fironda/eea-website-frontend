@@ -210,14 +210,23 @@ pipeline {
             //   sh "docker rmi $registry:$tagName"
             // }
       withCredentials([usernamePassword(credentialsId: 'eddie-jekinsdockerhub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-        sh '''
+        // sh '''
+        // echo "${env.DOCKER_PASSWORD}" | docker login -u "${env.DOCKER_USERNAME}" --password-stdin
+        // docker buildx create --use
+        // docker buildx build --platform linux/amd64,linux/arm64 \
+        //   -t ${registry}:${tagName} \
+        //   --push .
+        // docker buildx rm
+        // '''
+        def dockerCommands = """
         echo "${env.DOCKER_PASSWORD}" | docker login -u "${env.DOCKER_USERNAME}" --password-stdin
         docker buildx create --use
         docker buildx build --platform linux/amd64,linux/arm64 \
           -t ${registry}:${tagName} \
           --push .
         docker buildx rm
-        '''
+        """
+        sh dockerCommands        
             }
           }
         }
