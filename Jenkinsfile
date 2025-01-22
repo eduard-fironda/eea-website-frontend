@@ -196,12 +196,11 @@ pipeline {
       steps{
           script {
             checkout scm
-            if (env.BRANCH_NAME == 'master') {
-              tagName = 'latest'
-            } else {
-              // tagName = "$BRANCH_NAME"
-              tagName = "latest"
-            }
+            // if (env.BRANCH_NAME == 'master') {
+            //   tagName = 'latest'
+            // } else {
+            //   tagName = "$BRANCH_NAME"
+            // }
             // try {
             //   dockerImage = docker.build("$registry:$tagName", "--no-cache .")
             //   docker.withRegistry( '', 'eeajenkins' ) {
