@@ -199,7 +199,8 @@ pipeline {
             if (env.BRANCH_NAME == 'master') {
               tagName = 'latest'
             } else {
-              tagName = "$BRANCH_NAME"
+              // tagName = "$BRANCH_NAME"
+              tagName = "latest"
             }
             // try {
             //   dockerImage = docker.build("$registry:$tagName", "--no-cache .")
