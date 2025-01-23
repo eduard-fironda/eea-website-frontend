@@ -187,12 +187,12 @@ pipeline {
     // }
 
     stage('Build & Push ( on tag )') {
-      // when {
-      //   anyOf {
-      //     buildingTag()
-      //     branch 'volto-17'
-      //   }
-      // }
+      when {
+        anyOf {
+          buildingTag()
+          branch 'volto-17'
+        }
+      }
       steps{
           script {
             checkout scm
