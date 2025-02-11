@@ -201,6 +201,8 @@ pipeline {
             } else {
               tagName = "$BRANCH_NAME"
             }
+            sh 'env'
+            sh 'docker info'
             sh '''
               # Fetch the latest buildx release version from GitHub API
               LATEST_BUILDX_VERSION=$(curl -s https://api.github.com/repos/docker/buildx/releases/latest | grep '"tag_name":' | cut -d '"' -f4)
