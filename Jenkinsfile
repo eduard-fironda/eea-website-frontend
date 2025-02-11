@@ -206,10 +206,10 @@ pipeline {
                 echo "Docker Buildx not found. Installing..."
                 mkdir -p ~/.docker/cli-plugins
                 # Fetch the latest release version from GitHub API
-                BUILDX_VERSION=$(curl -s https://api.github.com/repos/docker/buildx/releases/latest | jq -r .tag_name)
+                BUILDX_VERSION=$(curl -s https://api.github.com/repos/docker/buildx/releases/latest | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
                 echo "Latest Buildx version: $BUILDX_VERSION"
                 # Download and install Buildx
-                curl -SL https://github.com/docker/buildx/releases/download/$BUILDX_VERSION/buildx-$BUILDX_VERSION.linux-amd64 -o ~/.docker/cli-plugins/docker-buildx
+                curl -SL https://github.com/docker/buildx/releases/download/v$BUILDX_VERSION/buildx-v$BUILDX_VERSION.linux-amd64 -o ~/.docker/cli-plugins/docker-buildx
                 chmod +x ~/.docker/cli-plugins/docker-buildx
                 echo "Docker Buildx installed."
               else
