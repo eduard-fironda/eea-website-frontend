@@ -207,7 +207,7 @@ pipeline {
               echo "Latest Buildx version: $LATEST_BUILDX_VERSION"
 
               # Check if Buildx is installed and get the installed version
-              docker buildx version > /dev/null 2>&1
+              docker buildx version > /dev/null 2>&1 || true
               if [ $? -ne 0 ]; then
                 echo "Docker Buildx not found. Installing version $LATEST_BUILDX_VERSION..."
                 mkdir -p ~/.docker/cli-plugins
