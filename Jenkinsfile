@@ -201,6 +201,21 @@ pipeline {
             } else {
               tagName = "$BRANCH_NAME"
             }
+            sh '''
+              if ! docker buildx version > /dev/null 2>&1; then
+                echo "Docker Buildx not found. Installing..."
+                mkdir -p ~/.docker/cli-plugins
+                # Fetch the latest release version from GitHub API
+                BUILDX_VERSION=$(curl -s https://api.github.com/repos/docker/buildx/releases/latest | jq -r .tag_name)
+                echo "Latest Buildx version: $BUILDX_VERSION"
+                # Download and install Buildx
+                curl -SL https://github.com/docker/buildx/releases/download/$BUILDX_VERSION/buildx-$BUILDX_VERSION.linux-amd64 -o ~/.docker/cli-plugins/docker-buildx
+                chmod +x ~/.docker/cli-plugins/docker-buildx
+                echo "Docker Buildx installed."
+              else
+                echo "Docker Buildx is already installed."
+              fi
+            '''
             // try {
             //   dockerImage = docker.build("$registry:$tagName", "--no-cache .")
             //   docker.withRegistry( '', 'eeajenkins' ) {
