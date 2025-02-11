@@ -206,15 +206,8 @@ pipeline {
               LATEST_BUILDX_VERSION=$(curl -s https://api.github.com/repos/docker/buildx/releases/latest | grep '"tag_name":' | cut -d '"' -f4)
               echo "Latest Buildx version: $LATEST_BUILDX_VERSION"
 
-              # Check if Buildx is installed and get the installed version
-              docker buildx version > /dev/null 2>&1 || true
-              if [ $? -ne 0 ]; then
-                echo "Docker Buildx not found. Installing version $LATEST_BUILDX_VERSION..."
-                mkdir -p ~/.docker/cli-plugins
-                curl -SL https://github.com/docker/buildx/releases/download/$LATEST_BUILDX_VERSION/buildx-$LATEST_BUILDX_VERSION.linux-amd64 -o ~/.docker/cli-plugins/docker-buildx
-                chmod +x ~/.docker/cli-plugins/docker-buildx
-                echo "Docker Buildx installed."
-              else
+              # Check if Buildx is installed
+              if docker buildx version > /dev/null 2>&1; then
                 INSTALLED_BUILDX_VERSION=$(docker buildx version | grep 'github.com/docker/buildx' | awk '{print $2}')
                 echo "Installed Buildx version: $INSTALLED_BUILDX_VERSION"
 
@@ -228,6 +221,12 @@ pipeline {
                   chmod +x ~/.docker/cli-plugins/docker-buildx
                   echo "Docker Buildx updated to version $LATEST_BUILDX_VERSION."
                 fi
+              else
+                echo "Docker Buildx not found. Installing version $LATEST_BUILDX_VERSION..."
+                mkdir -p ~/.docker/cli-plugins
+                curl -SL https://github.com/docker/buildx/releases/download/$LATEST_BUILDX_VERSION/buildx-$LATEST_BUILDX_VERSION.linux-amd64 -o ~/.docker/cli-plugins/docker-buildx
+                chmod +x ~/.docker/cli-plugins/docker-buildx
+                echo "Docker Buildx installed."
               fi
             '''
             // try {
