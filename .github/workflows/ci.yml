@@ -26,21 +26,6 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Install Dependencies (if missing)
-        run: |
-          if [ ! -d "node_modules" ]; then
-            echo "node_modules not found, running yarn install"
-            yarn install --frozen-lockfile
-          fi
-
-      - name: Debug Yarn and Environment
-        run: |
-          yarn --version || echo "Yarn not installed"
-          node --version || echo "Node not installed"
-          echo "Current working directory: $(pwd)"
-          echo "Contents of node_modules:"
-          ls -al node_modules || echo "node_modules directory not found"
-
       - name: Determine Docker tag
         id: docker_tag
         run: |
