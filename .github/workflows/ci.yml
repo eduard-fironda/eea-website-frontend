@@ -29,7 +29,7 @@ jobs:
       - name: Determine Docker tag
         id: docker_tag
         run: |
-          if [[ "${{ github.ref_name }}" == "master" ]]; then
+          if [[ "${{ github.ref }}" == "refs/heads/master" ]]; then
             echo "tag=latest" >> $GITHUB_ENV
           else
             echo "tag=${{ github.ref_name }}" >> $GITHUB_ENV
@@ -43,3 +43,4 @@ jobs:
           push: true
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.tag }}
+          no-cache: true
