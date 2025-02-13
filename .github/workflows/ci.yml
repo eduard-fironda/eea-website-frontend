@@ -29,11 +29,14 @@ jobs:
       - name: Determine Docker tag
         id: docker_tag
         run: |
-          if [[ "${{ github.ref }}" == refs/heads/master ]]; then
+          if [[ "${{ github.ref_name }}" == "master" ]]; then
             echo "tag=latest" >> $GITHUB_ENV
           else
-            echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+            echo "tag=${{ github.ref_name }}" >> $GITHUB_ENV
           fi
+
+      - name: Debug Docker tag
+        run: echo "Docker tag is ${{ env.tag }}"
 
       - name: Build and push Docker image (ARM)
         uses: docker/build-push-action@v5
@@ -41,4 +44,5 @@ jobs:
           context: .
           platforms: linux/arm64
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.tag }}
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.tag }}
