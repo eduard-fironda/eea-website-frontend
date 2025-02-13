@@ -26,6 +26,13 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: Install Dependencies (if missing)
+        run: |
+          if [ ! -d "node_modules" ]; then
+            echo "node_modules not found, running yarn install"
+            yarn install --frozen-lockfile
+          fi
+
       - name: Debug Yarn and Environment
         run: |
           yarn --version || echo "Yarn not installed"
